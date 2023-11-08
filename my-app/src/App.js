@@ -5,10 +5,12 @@ import Searchbar from "./component/Searchbar";
 import DataGrid from "./component/DataGrid";
 import axios, { Axios } from "axios";
 import { useEffect, useState } from "react";
+import { Skeleton } from "antd";
 
 function App() {
   const [searchItem, setSearchItem] = useState("");
   const [fetchedData, setfetchedData] = useState([]);
+  const [Skeleton, setSkeleton] = useState(true);
   useEffect(() => {
     fetchDetailsDefault();
   }, []);
@@ -57,6 +59,7 @@ function App() {
         </div>
         <Searchbar searchItem={searchItem} setSearchItem={setSearchItem} />
         {<DataGrid fetchedData={fetchedData} />}
+        {Skeleton && <Skeleton />}
       </div>
     </>
   );

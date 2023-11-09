@@ -5,10 +5,14 @@ export default function DataCard({ fetchedData }) {
     <>
       <div className=" w-[180px] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
         <a href="#">
-          <img className="rounded-t-lg" src={fetchedData.avatar_url} alt="" />
+          <img
+            className="rounded-t-lg"
+            src={fetchedData.avatar_url || "noImage.png"}
+            alt=""
+          />
         </a>
         <div className="p-5">
-          <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+          <p className="mb-3 font-normal text-gray-700 dark:text-gray-400 text-wrap ">
             Name:{fetchedData.login}{" "}
           </p>
           <a

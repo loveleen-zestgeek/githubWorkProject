@@ -1,4 +1,5 @@
 import React from "react";
+import RightArrow from "../icons/RightArrow";
 
 export default function DataCard({ githubUserData }) {
   return (
@@ -21,21 +22,7 @@ export default function DataCard({ githubUserData }) {
             rel="noreferrer"
           >
             Repo Url
-            <svg
-              className="w-3.5 h-3.5 ml-2"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 10"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M1 5h12m0 0L9 1m4 4L9 9"
-              />
-            </svg>
+            <RightArrow />
           </a>
         </div>
       </div>

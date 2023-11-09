@@ -1,7 +1,6 @@
 import logo from "./logo.svg";
 import "./App.css";
 import "./Main.css";
-import Searchbar from "./component/Searchbar";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Loader from "react-js-loader";

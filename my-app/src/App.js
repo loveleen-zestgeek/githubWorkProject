@@ -2,21 +2,22 @@ import logo from "./logo.svg";
 import "./App.css";
 import "./Main.css";
 import Searchbar from "./component/Searchbar";
-import DataGrid from "./component/DataGrid";
-import axios, { Axios } from "axios";
+import axios from "axios";
 import { useEffect, useState } from "react";
-import { Skeleton } from "antd";
 import Loader from "react-js-loader";
+import CustomPagination from "./component/CustomPagination";
+
+const client = axios.create({
+  baseURL: "https://api.github.com",
+});
 
 function App() {
   const [searchItem, setSearchItem] = useState("");
-  const [fetchedData, setfetchedData] = useState([]);
+  const [githubUserData, setgithubUserData] = useState([]);
   const [loader, setloader] = useState(true);
-  const [userNotExist, setuserNotExist] = useState(false);
-  const [maxLimit, setmaxLimit] = useState(false);
-  const client = axios.create({
-    baseURL: "https://api.github.com",
-  });
+  const [isUserNotExist, setisUserNotExist] = useState(false);
+  const [isMaxLimit, setisMaxLimit] = useState(false);
+
   useEffect(() => {
     fetchDetailsDefault();
   }, []);
@@ -28,7 +29,7 @@ function App() {
       } else {
         fetchDetails();
       }
-    }, 1);
+    }, 1000);
     return () => clearTimeout(delayDebounceFn);
   }, [searchItem]);
 
@@ -37,37 +38,38 @@ function App() {
       setloader(true);
       let response = await client.get(`/users`);
       response = response.data;
-      setfetchedData(response);
-      console.log("fetchDetailsDefault RUN");
+      setgithubUserData(response);
+
       setloader(false);
-      setmaxLimit(false);
-      console.log("FethcedData:", fetchedData);
+      setisMaxLimit(false);
     } catch (error) {
-      console.log("Errrrrrrr", error);
+      console.log("Error");
     }
   };
 
   const fetchDetails = async () => {
     try {
       setloader(true);
-      let response = await client.get(`/search/users?q=${searchItem}`);
-      console.log(response);
+      let response = await client.get(
+        `/search/users?q=${searchItem}&per_page=99`
+      );
+
       let itemsResponse = response.data.items;
       if (itemsResponse.length == 0) {
-        setuserNotExist(true);
+        setisUserNotExist(true);
       } else {
-        setuserNotExist(false);
+        setisUserNotExist(false);
       }
 
-      setfetchedData(itemsResponse || []);
+      setgithubUserData(itemsResponse || []);
       setloader(false);
-      setmaxLimit(false);
+      setisMaxLimit(false);
     } catch (error) {
-      console.log("dd", error.response.status);
+      console.log("Error Occured");
       if (error.response.status === 403) {
-        setmaxLimit(true);
+        setisMaxLimit(true);
       } else {
-        setmaxLimit(false);
+        setisMaxLimit(false);
       }
     }
   };
@@ -78,7 +80,7 @@ function App() {
         <h1 className="text-center text-3xl py-3">Github Users Data</h1>
       </div>
       <Searchbar searchItem={searchItem} setSearchItem={setSearchItem} />
-      {maxLimit ? (
+      {isMaxLimit ? (
         <p className="my-6 text-gray-600 text-2xl text-center">
           Maximum Limit Reached
         </p>
@@ -93,7 +95,7 @@ function App() {
             size={100}
           />
         </div>
-      ) : userNotExist ? (
+      ) : isUserNotExist ? (
         <div className="flex justify-center items-center flex-col">
           <p className="my-6 text-gray-600 text-2xl">user not found</p>
           <img
@@ -103,11 +105,9 @@ function App() {
           ></img>
         </div>
       ) : (
-        <DataGrid fetchedData={fetchedData} />
+        <CustomPagination itemsPerPage={10} githubUserData={githubUserData} />
       )}
-      {/* {Skeleton && <Skeleton />} */}
     </>
   );
 }
-
 export default App;

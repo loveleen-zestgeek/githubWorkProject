@@ -2,14 +2,15 @@ import React, { useEffect, useState } from "react";
 
 import ReactPaginate from "react-paginate";
 import DataCard from "./DataCard";
-function Items({ fetchedData }) {
+
+function Items({ githubUserData }) {
   return (
     <>
-      <div className="py-20 px-4 lg:px-12 lg:px-20 grid sm:grid-cols-2 place-item-center space-y-3 md:grid-cols-4 lg:grid-cols-5 md:gap-6 justify-center items-center  ">
-        {fetchedData &&
-          fetchedData.map((item) => (
+      <div className="py-20 px-4   lg:px-20 grid sm:grid-cols-2 place-item-center space-y-3 md:grid-cols-4 lg:grid-cols-5 md:gap-6 justify-center items-center  ">
+        {githubUserData &&
+          githubUserData.map((item) => (
             <div>
-              <DataCard fetchedData={item} key={item.login} />
+              <DataCard githubUserData={item} key={item.login} />
             </div>
           ))}
       </div>
@@ -17,7 +18,7 @@ function Items({ fetchedData }) {
   );
 }
 
-export default function MyPagination({ itemsPerPage, fetchedData }) {
+export default function CustomPagination({ itemsPerPage, githubUserData }) {
   // Here we use item offsets; we could also use page offsets
   // following the API or data you're working with.
   const [itemOffset, setItemOffset] = useState(0);
@@ -26,16 +27,12 @@ export default function MyPagination({ itemsPerPage, fetchedData }) {
   // (This could be items from props; or items loaded in a local state
   // from an API endpoint with useEffect and useState)
   const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
-  const currentItems = fetchedData.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(fetchedData.length / itemsPerPage);
+  const currentItems = githubUserData.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(githubUserData.length / itemsPerPage);
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % fetchedData.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
+    const newOffset = (event.selected * itemsPerPage) % githubUserData.length;
     setItemOffset(newOffset);
   };
 
@@ -43,7 +40,7 @@ export default function MyPagination({ itemsPerPage, fetchedData }) {
     <>
       <div className="flex flex-col">
         <div className="">
-          <Items fetchedData={currentItems} />
+          <Items githubUserData={currentItems} />
         </div>
         <div className="mb-12">
           <ReactPaginate

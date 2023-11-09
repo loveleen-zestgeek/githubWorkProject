@@ -5,6 +5,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Loader from "react-js-loader";
 import CustomPagination from "./component/CustomPagination";
+import Searchbar from "./component/Searchbar";
 
 const client = axios.create({
   baseURL: "https://api.github.com",
